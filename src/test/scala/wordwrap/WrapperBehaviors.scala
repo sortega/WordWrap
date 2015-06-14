@@ -41,6 +41,13 @@ trait WrapperBehaviors extends PropertyChecks with ShouldMatchers { this: FlatSp
         wordsOf(Wrapper.wrap(text.mkString(" "), width)) shouldBe textWithLongWordsSplit
       }
     }
+
+    it should "be idempotent" in new {
+      forAll(lines, columnWidths) { (text: String, width: Int) =>
+        val wrappedText = Wrapper.wrap(text, width)
+        Wrapper.wrap(wrappedText, width) shouldBe wrappedText
+      }
+    }
   }
 
   private def removeWhitespace(text: String) = text.replaceAll("\\s", "")
